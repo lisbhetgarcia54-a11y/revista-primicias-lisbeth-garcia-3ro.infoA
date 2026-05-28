@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Primicias Magazine</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background:#ead7ff;
+            color:#5b3b75;
+            padding:30px;
+            scroll-behavior: smooth; /* Hace que el movimiento al hacer clic sea suave */
+        }
+
+        /* 🎬 ANIMACIONES DE ENTRADA (KEYFRAMES) */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 10px 25px rgba(199, 125, 255, 0.4); }
+            50% { box-shadow: 0 10px 35px rgba(199, 125, 255, 0.8); }
+            100% { box-shadow: 0 10px 25px rgba(199, 125, 255, 0.4); }
+        }
+
+        /* PORTADA CON MOVIMIENTO Y PULSO */
+        .cover{
+            width:90%;
+            margin:auto;
+            background:linear-gradient(135deg, #d9b8ff, #c77dff, #e0c3fc);
+            background-size: 200% 200%;
+            padding:70px;
+            border-radius:35px;
+            text-align:center;
+            animation: fadeInUp 1s ease-out, pulseGlow 3s infinite ease-in-out;
+            transition: transform 0.4s ease;
+        }
+        
+        .cover:hover {
+            transform: scale(1.02) rotate(-0.5deg); /* Efecto de inclinación ligera */
+        }
+
+        .cover h1{
+            font-size:65px;
+            color:white;
+            margin-bottom:20px;
+            text-shadow: 2px 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .subtitle{
+            font-size:30px;
+            color:#fdf4ff;
+        }
+
+        .slogan{
+            margin-top:20px;
+            font-size:24px;
+            color:white;
+            font-style:italic;
+        }
+
+        .info{
+            margin-top:40px;
+            background:#f3e8ff;
+            padding:30px;
+            border-radius:25px;
+        }
+
+        .info p{
+            font-size:20px;
+            margin:12px;
+            color:#6d3b8c;
+        }
+
+        /* TARJETAS CON EFECTO DE DESVANECIMIENTO Y REVELADO */
+        .card{
+            width:90%;
+            margin:40px auto;
+            padding:40px;
+            border-radius:30px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.1);
+            line-height:1.9;
+            animation: fadeInUp 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease, background-color 0.4s ease; 
+        }
+        
+        /* Efecto de iluminación y rotación 3D simulada al pasar el mouse */
+        .card:hover {
+            transform: translateY(-8px) scale(1.015); 
+            box-shadow: 0 15px 30px rgba(91, 59, 117, 0.2);
+        }
+
+        /* COLORES */
+        .history { background:#e0c3fc; }
+        .culture { background:#ffc8dd; }
+        .people { background:#cdb4db; }
+        .facts { background:#bde0fe; }
+        .gallery { background:#d8f3dc; }
+        .conclusion { background:#f9dcc4; }
+
+        /* TITULOS */
+        h2{
+            font-size:38px;
+            color:white;
+            margin-bottom:25px;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* TEXTO */
+        .card p{
+            font-size:20px;
+            margin-bottom:20px;
+        }
+
+        /* ÍNDICE ENLAZADO CON EFECTO FLOTANTE */
+        .toc-list {
+            font-size: 20px; 
+            margin-left: 30px; 
+            margin-bottom: 30px; 
+            list-style-type: square;
+        }
+
+        .toc-list li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #5b3b75;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            transition: color 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+
+        .toc-list a:hover {
+            color: #9d4edd;
+            transform: translateX(12px) scale(1.1); /* Se mueve a la derecha y crece al mismo tiempo */
+        }
+
+        /* BOTONES DE ACCIÓN DIRECTA */
+        .nav-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 24px;
+            background: #9d4edd;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            border-radius: 50px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #7b2cbf;
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        }
+
+        /* MENÚ FLOTANTE LATERAL PERSISTENTE */
+        .floating-nav {
+            position: fixed;
+            bottom: 40px;
+            right: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .float-btn {
+            width: 55px;
+            height: 55px;
+            background: #7b2cbf;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .float-btn:hover {
+            background: #9d4edd;
+            transform: scale(1.15) translateY(-3px);
+        }
+
+        /* PÁRRAFOS DE PROFESORES CON EFECTO DE LUZ LATERAL */
+        .teacher-block {
+            padding: 15px;
+            border-radius: 15px;
+            border-left: 0px solid #7b2cbf;
+            transition: all 0.4s ease;
+        }
+        
+        .teacher-block:hover {
+            background-color: rgba(255, 255, 255, 0.6); 
+            padding-left: 25px; 
+            border-left: 8px solid #7b2cbf; /* Aparece una barra de color interactiva a la izquierda */
+        }
+
+        /* GALERÍA CON EFECTO ROTATIVO Y ZOOM INTEGRADO */
+        .gallery-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+            gap:25px;
+            margin-top:30px;
+        }
+
+        .gallery-item{
+            background:#f3e8ff;
+            border-radius:20px;
+            overflow:hidden;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        .gallery-item:hover{
+            transform: translateY(-10px) rotate(1deg); /* Gira levemente dando un estilo dinámico */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+
+        .image-box{
+            width:100%;
+            height:230px;
+            overflow:hidden;
+            background:#e9d5ff;
+        }
+
+        .image-box img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
+        }
+
+        .gallery-item:hover img{
+            transform: scale(1.12) rotate(-1deg); /* Zoom cruzado invertido con la tarjeta */
+        }
+
+        .info-box{
+            padding:18px;
+        }
+
+        .info-box h3{
+            font-size:22px;
+            margin-bottom:10px;
+            color:#7b2cbf;
+        }
+
+        .info-box p{
+            font-size:16px;
+            color:#6d3b8c;
+        }
+
+        /* MENSAJE FINAL CON LATIDO CONSTANTE */
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .message-box{
+            margin-top:35px;
+            background:#fff0f6;
+            padding:25px;
+            border-radius:20px;
+            text-align:center;
+            box-shadow:0 4px 10px rgba(0,0,0,0.1);
+            animation: heartBeat 2.5s infinite ease-in-out; /* El mensaje final tiene un efecto de latido continuo */
+        }
+
+        .message-box h3{
+            color:#9d4edd;
+            font-size:28px;
+            margin-bottom:15px;
+        }
+
+        .message-box p{
+            font-size:20px;
+            color:#6d3b8c;
+            line-height:1.8;
+        }
+
+        /* FOOTER */
+        footer{
+            width:90%;
+            margin:40px auto;
+            background:#c77dff;
+            padding:25px;
+            text-align:center;
+            border-radius:20px;
+            color:white;
+            font-size:20px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div id="top-anchor"></div>
+
+    <div class="floating-nav">
+        <a href="#top-anchor" class="float-btn" title="Go to Top">⬆️</a>
+        <a href="#magazine-footer" class="float-btn" title="Go to Bottom">⬇️</a>
+    </div>
+
+    <header class="cover">
+
+        <h1>Primicias de la Cultura de Quito</h1>
+
+        <p class="subtitle">
+            Digital Magazine 2026
+        </p>
+
+        <p class="slogan">
+            “Discover our history and culture”
+        </p>
+
+        <div class="info">
+
+            <p><strong>Student:</strong> Lisbeth García</p>
+
+            <p><strong>Course:</strong> 3ro Info A</p>
+
+            <p><strong>Teacher:</strong> Msc. Carina Luna</p>
+
+            <p>
+                <strong>Institution:</strong>
+                Unidad Educativa Fiscal
+                Primicias de la Cultura de Quito
+            </p>
+
+        </div>
+
+    </header>
+
+    <section class="card history" style="background:#e8dbff;">
+
+        <h2>📌 Table of Contents</h2>
+
+        <ul class="toc-list">
+            <li><a href="#introduction">1. Introduction (Editorial)</a></li>
+            <li><a href="#history">2. History of the School</a></li>
+            <li><a href="#traditions">3. Cultural Traditions</a></li>
+            <li><a href="#people">4. Important People</a></li>
+            <li><a href="#facts">5. Fun Facts</a></li>
+            <li><a href="#gallery">6. Photo Gallery</a></li>
+            <li><a href="#conclusion">7. Conclusion</a></li>
+        </ul>
+
+        <a href="#conclusion" class="nav-btn">➡️ Skip to Conclusion</a>
+
+        <hr style="border: 1px dashed #c77dff; margin-top: 30px; margin-bottom: 25px;">
+
+        <h2 id="introduction">✍️ Introduction</h2>
+
+        <p>
+            Welcome to this digital magazine showcasing the history and culture of Primicias de la Cultura de Quito High School. The purpose of this project is to share our traditions, stories, and student experiences. I decided to study Informatics because I wanted to learn new tech skills, explore the world of programming, and build creative digital projects like this website. I want to highlight how our technical institution inspires innovation, knowledge, and integrity every day.
+        </p>
+
+    </section>
+
+    <section id="history" class="card history">
+
+        <h2>📚 History of the School</h2>
+
+        <p>
+            The Unidad Educativa Fiscal "Primicias de la Cultura de Quito" has a long history of academic and technical excellence. Our beloved institution was founded in 1976 to provide quality education to the youth in the south of Quito.
+        </p>
+
+        <p>
+            The school was created to inspire students based on the critical and scientific ideals of Eugenio Espejo. Its name honors the first newspaper in Ecuador, which was founded by him in 1792.
+        </p>
+
+        <p>
+            Over the years, the institution changed and grew significantly. It started as a small school, but it became a very important reference for technical education, especially in the specialties of Informatics and Automotive Mechanics.
+        </p>
+
+    </section>
+
+    <section id="traditions" class="card culture">
+
+        <h2>🎭 Cultural Traditions</h2>
+
+        <p>
+            Our institution has beautiful traditions that bring students together every year. One of the most important celebrations is the School Anniversary (Fiestas del Colegio), where we celebrate our identity with academic events, artistic festivals, and special presentations by our Peace Band and Majorettes.
+        </p>
+
+        <p>
+            We also celebrate the Fiestas de Quito in December with traditional games, music, and typical dances. This activity helps us remember our historical roots, show city pride, and strengthen teamwork and friendship among all courses.
+        </p>
+
+        <p>
+            Finally, sports are a fundamental part of our school culture. The soccer championships (campeonatos de fútbol) generate a lot of enthusiasm, where each class competes with discipline, leadership, and institutional pride.
+        </p>
+
+    </section>
+
+    <section id="people" class="card people">
+
+        <h2>👩‍🏫 Important People</h2>
+
+        <p class="teacher-block">
+            <strong>Mgs. Damaris Gavilanes (Principal):</strong> She is the main authority and principal of our institution. She works hard every day to lead our high school with academic and technical success. Thanks to her administration, our community continues to improve its educational standards, safety, and school facilities for all active students.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Msc. Carina Luna (English Teacher):</strong> She is our language educator who guides third-year students in their interdisciplinary magazine projects. She helps us develop our technical communication and English skills for the modern world. Her constant guidance is essential for our academic success and future life.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. Estela Calvache (Entrepreneurship Teacher):</strong> She is an outstanding high school educator who teaches Entrepreneurship and Management (Emprendimiento). She guides third-year students to develop business mindsets, financial planning, and professional skills for the modern world. Her class promotes critical thinking, strategic planning, and creative solutions.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. Marcela Cajas (Chemistry Teacher):</strong> She is a dedicated teacher who inspires our scientific and academic growth through Chemistry (Química). She helps us understand complex chemical formulas, laboratory experiments, and scientific methods with great patience. Her effort is very important for our responsibility, scientific research, and intellectual innovation.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. Andrés Almeida (Mathematics Teacher):</strong> He is an excellent educator who supports our numerical and scientific skills in Mathematics (Matemáticas). He motivates students to solve complex algebraic calculations, logical equations, and practical geometry problems. Through his methodology, he teaches us the values of intellectual discipline and critical thinking.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. Jorge Zumba (Physical Education Teacher):</strong> He is a key high school instructor who guides students through physical health, sports, and Physical Education (Educación Física). He teaches us essential training habits, athletics coordination, and soccer tactics. His professional dedication encourages team spirit, body discipline, and health values.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. Geovany Portero (Technical Support Teacher):</strong> He is an outstanding technical instructor who teaches Technical Support (Soporte Técnico) in Informatics. He shares important knowledge regarding computer maintenance, hardware troubleshooting, operating systems, and computing safety. He encourages third-year students to build successful tech solutions for the community.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. David Salazar (Physics Teacher):</strong> He is an outstanding high school educator who teaches Physics (Física) to third-year students. He guides us to understand the laws of nature, energy, and universe mechanics through logical experiments and mathematical calculations. His dedication helps us develop strong analytical skills, scientific curiosity, and problem-solving abilities for our technical careers.
+        </p>
+
+        <p class="teacher-block">
+            <strong>Mgs. Mercedes Posso (Biology Teacher):</strong> She is a dedicated high school teacher who guides students through the fascinating world of Biology (Biología). She organizes interdisciplinary learning tasks about ecosystems, cell structures, and environmental sciences. Her education promotes ecological respect, human health awareness, and commitment within the classroom.
+        </p>
+
+    </section>
+
+    <section id="facts" class="card facts">
+
+        <h2>⭐ Fun Facts</h2>
+
+        <p>• The name of our school honors the first newspaper in Ecuador, which was founded by Eugenio Espejo in 1792.</p>
+        <p>• Our institution is incredibly big and unique because it runs three complete learning shifts: morning (matutina), afternoon (vespertina), and night (nocturna).</p>
+        <p>• It welcomes thousands of active students, being a major reference point for technical education in the south of Quito.</p>
+        <p>• The first major institutional anniversary and cultural parade of the high school was celebrated back in 2010.</p>
+
+    </section>
+
+    <section id="gallery" class="card gallery">
+
+        <h2>📸 Photo Gallery</h2>
+
+        <div class="gallery-grid">
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="14021654_953339828128714_1551690875113181842_n.jpg" alt="Shield">
+                </div>
+
+                <div class="info-box" style="border-top: 5px solid #1a365d;">
+                    <h3>🛡️ Institutional Shield</h3>
+
+                    <p>
+                        The shield of Unidad Educativa "Primicias de la Cultura de Quito" 
+                        represents our history, academic excellence, and the cultural legacy 
+                        of our city. It stands as a symbol of pride, honoring the values 
+                        of knowledge and integrity that guide our entire educational community.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="139bbaa8-6651-465f-9f3e-0325b0ca6ae0.jpg" alt="Informatica">
+                </div>
+
+                <div class="info-box" style="border-top:5px solid #c77dff;">
+                    <h3>💻 Informatics</h3>
+
+                    <p>
+                       The computer science area is essential in the institution because it helps students develop technological skills.
+                Students learn basic software usage, computer handling, safe internet practices, and digital document creation.
+
+                It also encourages logical thinking and problem-solving through practical activities.
+                Computer science is a key tool for students’
+                 academic and professional future.
+                    </p>
+                </div>
+
+            </div>
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="1000276243.jpg" alt="Mecánica">
+                </div>
+
+                <div class="info-box" style="border-top:5px solid #b388eb;">
+                    <h3>🔧 Automotive Mechanics</h3>
+
+                    <p>
+                        The mechanics area teaches students how machines, tools, and mechanical systems work.
+                They perform practical tasks such as disassembling, repairing, and maintaining different equipment.
+            
+
+                This specialty helps develop technical skills and discipline in work.
+                It is an important field because it prepares students for the industrial and automotive world.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="1000276241.jpg" alt="Bastoneras">
+                </div>
+
+                <div class="info-box" style="border-top:5px solid #ff8fab;">
+                    <h3>✨ Baton Group</h3>
+
+                    <p>
+                        The majorettes group represents discipline, elegance, and coordination within the institution.
+                They participate in parades, civic events, and cultural activities.
+            
+                Their performances combine dance, music, and coordination, showing school spirit.
+                They are a symbol of pride in important events.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="1000276252.jpg" alt=" Peace Band">
+                </div>
+
+                <div class="info-box" style="border-top:5px solid #9d4edd;">
+                    <h3>🎺 Peace Band</h3>
+
+                    <p>
+                         The Peace Band is one of the most representative
+            groups of the institution.
+            Through music, discipline,
+            and artistic presentations,
+            students demonstrate commitment,
+            responsibility,
+            and institutional identity
+            during civic and cultural events.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="1000276241.jpg" alt="Fútbol">
+                </div>
+
+                <div class="info-box" style="border-top:5px solid #ff70a6;">
+                    <h3>⚽ Teamwork and Sports</h3>
+
+                    <p>
+                        The school soccer team represents
+            discipline, teamwork,
+            dedication, and competitive spirit.
+            Students participate in interschool tournaments
+            and sports activities that promote
+            friendship, leadership,
+            and school pride.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="gallery-item">
+
+                <div class="image-box">
+                    <img src="1000193236.jpg" alt=" School Facilities">
+                </div>
+
+                <div class="info-box" style="border-top:5px solid #ffb4a2;">
+                    <h3>🏫 School Facilities</h3>
+
+                    <p>
+                        “The Sunset” is a cultural activity that promotes unity, reflection, and student participation.
+                Artistic presentations, music, and social gatherings take place during this event.
+            
+            
+                This activity helps strengthen values such as respect, friendship, and teamwork.
+                It is one of the most meaningful events within the institution.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section id="conclusion" class="card conclusion">
+
+        <h2>🏫 Conclusion</h2>
+
+        <p>
+            In conclusion, the institution provides a comprehensive education that combines academic learning with practical and cultural activities. Each area such as computer science, mechanics, majorettes, and cultural events contributes to important skill development.
+        </p>
+        
+        <p>
+            Through these experiences, students strengthen their knowledge, values, and teamwork abilities. This prepares them for their academic and professional future, encouraging responsibility and commitment.
+        </p>
+
+        <div class="message-box">
+
+            <h3>💜 Message for the Future 💜</h3>
+
+            <p>
+                “Education opens the doors
+                to knowledge, opportunities,
+                and a better future.”
+            </p>
+
+        </div>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="#top-anchor" class="nav-btn">⬆️ Back to Top</a>
+        </div>
+
+    </section>
+
+    <footer id="magazine-footer">
+        <p>Digital Magazine Created by: <strong>Lisbeth García</strong> | Course: <strong>3ro Info A</strong></p>
+        <p>Teacher: <strong>Msc. Carina Luna</strong> | Institution: UE Primicias de la Cultura de Quito | April 2026</p>
+    </footer>
+
+</body>
+</html>
